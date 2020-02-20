@@ -3,6 +3,7 @@ package com.example.swiftmusic.UI;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -22,6 +23,7 @@ public class Player extends AppCompatActivity {
     ImageView previous;
     ImageView play;
     ImageView next;
+    MediaPlayer mMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,5 +42,12 @@ public class Player extends AppCompatActivity {
 
         songFileList = (ArrayList) songExtraData.getParcelableArrayList("songFileList");
         int position = songExtraData.getInt("position",0);
+    }
+
+    private  void initMusicPlay(int position){
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()){
+            
+        }
+
     }
 }
