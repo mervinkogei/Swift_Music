@@ -1,4 +1,4 @@
-package com.example.swiftmusic;
+package com.example.swiftmusic.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.Toolbar;
 
 import com.example.swiftmusic.Models.PagerController;
+import com.example.swiftmusic.R;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
