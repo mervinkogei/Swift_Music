@@ -14,10 +14,10 @@ import com.example.swiftmusic.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CurrentMusic extends Fragment {
+public class Albums extends Fragment {
 
 
-    public CurrentMusic() {
+    public Albums() {
         // Required empty public constructor
     }
 
@@ -26,7 +26,7 @@ public class CurrentMusic extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_current_music, container, false);
+        return inflater.inflate(R.layout.fragment_albums, container, false);
     }
 
 }

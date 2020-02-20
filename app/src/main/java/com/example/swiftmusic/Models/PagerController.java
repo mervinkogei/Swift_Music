@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.swiftmusic.Fragments.AllMusic;
-import com.example.swiftmusic.Fragments.CurrentMusic;
+import com.example.swiftmusic.Fragments.Albums;
 import com.example.swiftmusic.Fragments.Playlists;
 
 public class PagerController extends FragmentPagerAdapter {
@@ -20,9 +20,9 @@ public class PagerController extends FragmentPagerAdapter {
     public Fragment getItem(int i) {
         switch (i){
             case 0:
-                return  new CurrentMusic();
+                return  new AllMusic();
             case 1:
-                return new AllMusic();
+                return new Albums();
             case 2:
                 return new Playlists();
 
