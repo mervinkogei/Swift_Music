@@ -3,6 +3,7 @@ package com.example.swiftmusic.Fragments;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,10 +12,12 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.swiftmusic.R;
+import com.example.swiftmusic.UI.Player;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -60,6 +63,19 @@ public class AllMusic extends Fragment {
 
                 musicArrayAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,songs);
                 allMusicList.setAdapter(musicArrayAdapter);
+
+                //Handle the songs onclick
+                allMusicList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent player = new Intent(getActivity(), Player.class);
+                        //Sending song details
+
+                        player.putExtra("songFileList",musics);
+                        player.putExtra("position",position);
+                        startActivity(player);
+                    }
+                });
             }
 
             @Override
