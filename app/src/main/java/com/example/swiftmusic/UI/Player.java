@@ -2,10 +2,13 @@ package com.example.swiftmusic.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -63,8 +66,8 @@ public class Player extends AppCompatActivity {
 
     }
 
-    private  void initMusicPlay(int position){
-        if (mMediaPlayer != null && mMediaPlayer.isPlaying()){
+    private  void initMusicPlay(int position) {
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.reset();
 
         }
@@ -75,7 +78,7 @@ public class Player extends AppCompatActivity {
         Uri songResourceUri = Uri.parse(songFileList.get(position).toString());
 
         //Create a Media Player
-        mMediaPlayer = MediaPlayer.create(getApplicationContext(),songResourceUri);
+        mMediaPlayer = MediaPlayer.create(getApplicationContext(), songResourceUri);
 
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -103,12 +106,12 @@ public class Player extends AppCompatActivity {
             }
         });
 
-                //setting the seekbar
+        //setting the seekbar
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                if (fromUser){
+                if (fromUser) {
                     mMediaPlayer.seekTo(progress); //seek the song
                     mSeekBar.setProgress(progress); //seek the progress
                 }
@@ -124,7 +127,37 @@ public class Player extends AppCompatActivity {
 
             }
         });
+
+        //setup seekbar to change the duration
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (mMediaPlayer != null) {
+                    try {
+                        if (mMediaPlayer.isPlaying()) {
+                            Message message = new Message();
+                            message.what = mMediaPlayer.getCurrentPosition();
+                            handler.sendMessage(message);
+                            Thread.sleep(1000);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
+
+        //Create Handler to set the progress
+
+        @SuppressLint("HandlerLeak")
+        private Handler handler = new Handler(){
+            @Override
+            public  void handleMessage (Message msg){
+                mSeekBar.setProgress(msg.what);
+            }
+        };
+
 
 
         //Now we can play music.
