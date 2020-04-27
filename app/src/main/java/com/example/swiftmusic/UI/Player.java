@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -38,17 +39,33 @@ public class Player extends AppCompatActivity {
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
 
+
+        //Checking if MediaPlayer is null
+        if (mMediaPlayer !=null){
+            mMediaPlayer.stop();
+        }
+
         Intent songData = getIntent();
         songExtraData = songData.getExtras();
 
         songFileList = (ArrayList) songExtraData.getParcelableArrayList("songFileList");
         int position = songExtraData.getInt("position",0);
         initMusicPlay(position);// Start the media player
+
+        //Set up the play/pause button
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                play();
+            }
+        });
+
     }
 
     private  void initMusicPlay(int position){
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()){
-            mMediaPlayer.stop();
+            mMediaPlayer.reset();
 
         }
         String name = songFileList.get(position).getName();
@@ -59,13 +76,75 @@ public class Player extends AppCompatActivity {
 
         //Create a Media Player
         mMediaPlayer = MediaPlayer.create(getApplicationContext(),songResourceUri);
-        //Now we can play music.
-        mMediaPlayer.start();
 
-        if (mMediaPlayer.isPlaying()){
-            play.setImageResource(R.drawable.pause_btn);
-        }else{
-            play.setImageResource(R.drawable.ic_play_arrow_black_24dp);
-        }
+        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                //Set seek bar Duration
+                mSeekBar.setMax(mMediaPlayer.getDuration());
+
+                //Start the Music Player
+                mMediaPlayer.start();
+
+                //Set Icon to pause
+                play.setImageResource(R.drawable.pause_btn);
+
+
+            }
+        });
+
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                //do something when the song finished
+
+                play.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+
+            }
+        });
+
+                //setting the seekbar
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                if (fromUser){
+                    mMediaPlayer.seekTo(progress); //seek the song
+                    mSeekBar.setProgress(progress); //seek the progress
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
+
+
+        //Now we can play music.
+//        mMediaPlayer.start();
+//
+//        if (mMediaPlayer.isPlaying()){
+//            play.setImageResource(R.drawable.pause_btn);
+//        }else{
+//            play.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+//        }
+
+        private void play(){
+            if (mMediaPlayer !=null &&  mMediaPlayer.isPlaying()){
+                mMediaPlayer.pause();
+                play.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+
+            }else {
+                mMediaPlayer.start();
+                play.setImageResource(R.drawable.pause_btn);
+
+            }
+        }
 }
