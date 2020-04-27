@@ -46,7 +46,7 @@ public class Player extends AppCompatActivity {
 
     private  void initMusicPlay(int position){
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()){
-            
+
         }
 
     }
