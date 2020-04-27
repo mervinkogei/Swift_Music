@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -42,12 +43,29 @@ public class Player extends AppCompatActivity {
 
         songFileList = (ArrayList) songExtraData.getParcelableArrayList("songFileList");
         int position = songExtraData.getInt("position",0);
+        initMusicPlay(position);// Start the media player
     }
 
     private  void initMusicPlay(int position){
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()){
+            mMediaPlayer.stop();
 
         }
+        String name = songFileList.get(position).getName();
+        mSongTitle.setText(name);
 
+        //Get music patch from the sdCard
+        Uri songResourceUri = Uri.parse(songFileList.get(position).toString());
+
+        //Create a Media Player
+        mMediaPlayer = MediaPlayer.create(getApplicationContext(),songResourceUri);
+        //Now we can play music.
+        mMediaPlayer.start();
+
+        if (mMediaPlayer.isPlaying()){
+            play.setImageResource(R.drawable.pause_btn);
+        }else{
+            play.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+        }
     }
 }
